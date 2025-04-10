@@ -1,1 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>⚡ VOLTAGE DICTIONARY</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Electrolize&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚡</text></svg>">
+</head>
+<body>
+    <div id="particles-js"></div>
+    <div class="electric-overlay"></div>
+    
+    <div class="container">
+        <header>
+            <h1 class="title-glitch" data-text="⚡ VOLTAGE DICTIONARY">
+                <span class="lightning"><i class="fas fa-bolt"></i></span> VOLTAGE DICTIONARY
+            </h1>
+            <div class="search-container">
+                <div class="search-box">
+                    <input type="text" id="search-input" placeholder="ENTER A WORD..." spellcheck="false" autocomplete="off">
+                    <button id="search-btn" aria-label="Search">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+                <div class="word-of-the-day" id="word-of-the-day">
+                    <span>Word of the day: <span id="wotd" class="wotd-text">loading...</span></span>
+                </div>
+            </div>
+        </header>
 
+        <main>
+            <div id="loading" class="loading-pulse hidden">
+                <div class="pulse"></div>
+            </div>
+
+            <div class="result-card" id="result-card">
+                <div class="word-header">
+                    <div>
+                        <h2 id="word" class="word-text"></h2>
+                        <p id="phonetic" class="phonetic-text"></p>
+                    </div>
+                    <button id="audio-btn" class="audio-button" aria-label="Pronounce word">
+                        <i class="fas fa-volume-up"></i>
+                    </button>
+                </div>
+
+                <div class="tabs">
+                    <button class="tab active" data-tab="definition" aria-controls="definition-tab">
+                        <i class="fas fa-book-open"></i> Definition
+                    </button>
+                    <button class="tab" data-tab="details" aria-controls="details-tab">
+                        <i class="fas fa-info-circle"></i> Details
+                    </button>
+                    <button class="tab" data-tab="pos" aria-controls="pos-tab">
+                        <i class="fas fa-tags"></i> Parts of Speech
+                    </button>
+                    <button class="tab" data-tab="translate" aria-controls="translate-tab">
+                        <i class="fas fa-language"></i> Translate
+                    </button>
+                </div>
+
+                <div class="tab-content">
+                    <div id="definition-tab" class="tab-pane active" role="tabpanel">
+                        <div class="meaning">
+                            <p id="definition" class="definition-text"></p>
+                            <p id="example" class="example-text"></p>
+                        </div>
+                        <button id="pronounce-def-btn" class="pronounce-button">
+                            <i class="fas fa-play"></i> Hear Definition
+                        </button>
+                    </div>
+
+                    <div id="details-tab" class="tab-pane" role="tabpanel">
+                        <div class="details-grid">
+                            <div class="detail-box">
+                                <h3><i class="fas fa-sync-alt"></i> Synonyms</h3>
+                                <p id="synonyms" class="synonyms-text"></p>
+                            </div>
+                            <div class="detail-box">
+                                <h3><i class="fas fa-random"></i> Antonyms</h3>
+                                <p id="antonyms" class="antonyms-text"></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="pos-tab" class="tab-pane" role="tabpanel">
+                        <div class="details-grid">
+                            <div class="detail-box">
+                                <h3><i class="fas fa-tag"></i> Parts of Speech</h3>
+                                <div id="pos-container" class="pos-container"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="translate-tab" class="tab-pane" role="tabpanel">
+                        <div class="translate-container">
+                            <div class="language-bubbles">
+                                <button class="language-bubble active" data-lang="es">ES</button>
+                                <button class="language-bubble" data-lang="fr">FR</button>
+                                <button class="language-bubble" data-lang="de">DE</button>
+                                <button class="language-bubble" data-lang="ja">JA</button>
+                                <button class="language-bubble" data-lang="ru">RU</button>
+                                <button class="language-bubble" data-lang="zh">ZH</button>
+                                <button class="language-bubble" data-lang="ar">AR</button>
+                            </div>
+                            <div id="translation-result" class="translation-result">
+                                <p>Select a language to translate</p>
+                            </div>
+                            <button id="translate-btn" class="translate-button">
+                                <i class="fas fa-exchange-alt"></i> Translate
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="error-card" id="error-card">
+                <div class="error-icon">
+                    <i class="fas fa-bolt"></i>
+                </div>
+                <h3>POWER SURGE DETECTED</h3>
+                <p id="error-message" class="error-text"></p>
+                <button id="retry-btn" class="retry-button">
+                    <i class="fas fa-redo"></i> Try Again
+                </button>
+            </div>
+        </main>
+
+        <footer class="app-footer">
+            <p>Powered by <span class="highlight">Voltage Dictionary API</span></p>
+        </footer>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script src="di.js"></script>
+</body>
+</html>
