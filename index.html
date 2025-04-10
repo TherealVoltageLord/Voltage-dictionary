@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>⚡ Welcome to Voltage Dictionary</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Electrolize&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚡</text></svg>">
+    <style>
+        /* Additional styles for the logo */
+        .logo-container {
+            margin-bottom: 2rem;
+            animation: float 3s ease-in-out infinite;
+            filter: drop-shadow(0 0 15px rgba(188, 19, 254, 0.7));
+        }
+        
+        .logo-img {
+            max-width: 250px;
+            height: auto;
+            border-radius: 15px;
+            border: 2px solid var(--electric-blue);
+            padding: 5px;
+            background: rgba(10, 0, 26, 0.8);
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+    </style>
+</head>
+<body>
+    <div id="particles-js"></div>
+    <div class="electric-overlay"></div>
+    
+    <div class="welcome-container">
+        <div class="welcome-content">
+            <!-- Added Logo Container -->
+            <div class="logo-container">
+                <img src="Voltdic.jpg" alt="Voltage Dictionary Logo" class="logo-img">
+            </div>
+            
+            <h1 id="welcome-text" class="title-glitch"></h1>
+            <p id="copyright-text" class="copyright-text"></p>
+            <div id="welcome-buttons" class="welcome-buttons hidden">
+                <button id="continue-btn" class="welcome-button neon-button">
+                    <i class="fas fa-bolt"></i> Continue
+                </button>
+                <button id="projects-btn" class="welcome-button ghost-button">
+                    <i class="fas fa-project-diagram"></i> Our Projects
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script src="Welcome.js"></script>
+</body>
+</html>
