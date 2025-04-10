@@ -1,0 +1,783 @@
+@import url('https://fonts.googleapis.com/css2?family=Electrolize&family=Rajdhani:wght@500;700&display=swap');
+
+:root {
+    --neon-purple: #bc13fe;
+    --neon-indigo: #6a0dad;
+    --neon-violet: #9400d3;
+    --electric-blue: #0ff0fc;
+    --neon-pink: #ff44cc;
+    --neon-cyan: #00fffc;
+    --neon-magenta: #ff00ff;
+    --dark-bg: #0a001a;
+    --darker-bg: #050012;
+    --text-light: #f8f0ff;
+    --text-glow: 0 0 10px var(--neon-purple), 
+                 0 0 20px rgba(188, 19, 254, 0.5);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: linear-gradient(135deg, var(--darker-bg), var(--dark-bg));
+    color: var(--text-light);
+    font-family: 'Rajdhani', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+    position: relative;
+}
+
+#particles-js {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+}
+
+.electric-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+        radial-gradient(circle at 20% 30%, rgba(106, 13, 173, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 80% 70%, rgba(15, 240, 252, 0.1) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 1;
+    animation: electricPulse 15s infinite alternate;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem;
+    position: relative;
+    z-index: 2;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 3rem;
+    position: relative;
+}
+
+.title-glitch {
+    font-family: 'Electrolize', sans-serif;
+    font-size: 2.8rem;
+    font-weight: 700;
+    color: var(--neon-purple);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 1.5rem;
+    position: relative;
+    text-shadow: var(--text-glow);
+    animation: glitch 2s infinite alternate;
+}
+
+.title-glitch .lightning {
+    color: var(--electric-blue);
+    margin-right: 0.5rem;
+    animation: flicker 1.5s infinite alternate;
+}
+
+.search-container {
+    margin-top: 2rem;
+}
+
+.search-box {
+    display: flex;
+    max-width: 600px;
+    margin: 0 auto;
+    position: relative;
+}
+
+#search-input {
+    flex: 1;
+    padding: 1.2rem 1.5rem;
+    background: rgba(10, 0, 26, 0.8);
+    border: 2px solid var(--neon-violet);
+    border-radius: 50px;
+    color: white;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 1.2rem;
+    font-weight: 500;
+    outline: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 15px rgba(106, 13, 173, 0.3);
+}
+
+#search-input:focus {
+    border-color: var(--electric-blue);
+    box-shadow: 0 0 25px rgba(15, 240, 252, 0.4);
+}
+
+#search-btn {
+    position: absolute;
+    right: 5px;
+    top: 5px;
+    background: var(--neon-purple);
+    color: white;
+    border: none;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 15px rgba(188, 19, 254, 0.5);
+}
+
+#search-btn:hover {
+    background: var(--electric-blue);
+    transform: scale(1.05);
+    box-shadow: 0 0 25px var(--electric-blue);
+}
+
+.word-of-the-day {
+    margin-top: 1rem;
+    color: var(--electric-blue);
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.word-of-the-day:hover {
+    text-shadow: 0 0 10px var(--electric-blue);
+}
+
+.wotd-text {
+    font-weight: 700;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+/* Loading Animation */
+.loading-pulse {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 200px;
+}
+
+.pulse {
+    width: 30px;
+    height: 30px;
+    background: var(--neon-purple);
+    border-radius: 50%;
+    animation: pulse 1.5s infinite;
+    box-shadow: 0 0 20px var(--neon-purple);
+}
+
+.hidden {
+    display: none;
+}
+
+/* Result Cards */
+.result-card, .error-card {
+    background: rgba(10, 0, 26, 0.7);
+    border-radius: 15px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 0 30px rgba(106, 13, 173, 0.3);
+    border: 1px solid var(--neon-violet);
+    backdrop-filter: blur(10px);
+    transform: translateY(20px);
+    opacity: 0;
+    animation: fadeInUp 0.5s forwards;
+}
+
+.error-card {
+    text-align: center;
+    display: none;
+}
+
+.error-icon {
+    font-size: 3rem;
+    color: var(--electric-blue);
+    margin-bottom: 1rem;
+    animation: flicker 1s infinite alternate;
+}
+
+.error-text {
+    color: var(--neon-pink);
+    margin: 1rem 0;
+}
+
+/* Word Header */
+.word-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--neon-violet);
+}
+
+.word-text {
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: var(--electric-blue);
+    text-shadow: 0 0 10px var(--electric-blue);
+    font-family: 'Electrolize', sans-serif;
+}
+
+.phonetic-text {
+    color: var(--neon-purple);
+    font-style: italic;
+    margin-top: 0.5rem;
+}
+
+.audio-button {
+    background: transparent;
+    border: 2px solid var(--neon-purple);
+    color: var(--neon-purple);
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 15px rgba(188, 19, 254, 0.3);
+}
+
+.audio-button:hover {
+    background: var(--neon-purple);
+    color: white;
+    transform: scale(1.1);
+    box-shadow: 0 0 25px var(--neon-purple);
+}
+
+/* Tabs System */
+.tabs {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid var(--neon-violet);
+    padding-bottom: 0.5rem;
+}
+
+.tab {
+    padding: 0.8rem 1.5rem;
+    background: transparent;
+    border: none;
+    color: var(--text-light);
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    position: relative;
+    opacity: 0.7;
+    transition: all 0.3s ease;
+    border-radius: 5px;
+}
+
+.tab i {
+    margin-right: 0.5rem;
+}
+
+.tab:hover {
+    opacity: 1;
+    color: var(--electric-blue);
+}
+
+.tab.active {
+    opacity: 1;
+    color: var(--neon-purple);
+    background: rgba(106, 13, 173, 0.2);
+}
+
+.tab.active::after {
+    content: '';
+    position: absolute;
+    bottom: -0.6rem;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: var(--neon-purple);
+    box-shadow: 0 0 10px var(--neon-purple);
+}
+
+.tab-content {
+    min-height: 200px;
+}
+
+.tab-pane {
+    display: none;
+    animation: fadeIn 0.3s ease;
+}
+
+.tab-pane.active {
+    display: block;
+}
+
+/* Definition Tab */
+.definition-text {
+    font-size: 1.3rem;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+}
+
+.example-text {
+    font-style: italic;
+    color: var(--neon-purple);
+    padding-left: 1rem;
+    border-left: 2px solid var(--neon-violet);
+    margin: 1.5rem 0;
+}
+
+.pronounce-button {
+    background: transparent;
+    border: 2px solid var(--electric-blue);
+    color: var(--electric-blue);
+    padding: 0.8rem 1.5rem;
+    border-radius: 50px;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 1rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.pronounce-button:hover {
+    background: var(--electric-blue);
+    color: var(--dark-bg);
+    box-shadow: 0 0 20px var(--electric-blue);
+}
+
+/* Details Tab */
+.details-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1rem;
+}
+
+.detail-box {
+    background: rgba(106, 13, 173, 0.2);
+    border: 1px solid var(--neon-violet);
+    border-radius: 10px;
+    padding: 1.5rem;
+    transition: all 0.3s ease;
+}
+
+.detail-box:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(106, 13, 173, 0.3);
+}
+
+.detail-box h3 {
+    color: var(--electric-blue);
+    margin-bottom: 1rem;
+    font-family: 'Electrolize', sans-serif;
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.synonyms-text, .antonyms-text {
+    line-height: 1.6;
+    font-size: 1.1rem;
+}
+
+/* Translate Tab */
+.translate-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.language-bubbles {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+}
+
+.language-bubble {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(106, 13, 173, 0.3);
+    color: var(--electric-blue);
+    font-family: 'Electrolize', sans-serif;
+    font-weight: bold;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 0 10px rgba(188, 19, 254, 0.3);
+}
+
+.language-bubble::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, 
+        rgba(188, 19, 254, 0.4) 0%, 
+        transparent 70%);
+    transform: scale(0);
+    transition: transform 0.5s ease;
+}
+
+.language-bubble:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 0 20px var(--neon-purple);
+    color: white;
+}
+
+.language-bubble:hover::before {
+    transform: scale(1);
+}
+
+.language-bubble.active {
+    color: white;
+    box-shadow: 0 0 20px var(--bubble-color),
+                0 0 30px rgba(var(--bubble-color-rgb), 0.5);
+    animation: bubble-pulse 2s infinite;
+}
+
+/* Language-specific bubble colors */
+.language-bubble[data-lang="es"] { --bubble-color: var(--electric-blue); --bubble-color-rgb: 15, 240, 252; }
+.language-bubble[data-lang="fr"] { --bubble-color: var(--neon-purple); --bubble-color-rgb: 188, 19, 254; }
+.language-bubble[data-lang="de"] { --bubble-color: var(--neon-indigo); --bubble-color-rgb: 106, 13, 173; }
+.language-bubble[data-lang="ja"] { --bubble-color: var(--neon-pink); --bubble-color-rgb: 255, 68, 204; }
+.language-bubble[data-lang="ru"] { --bubble-color: var(--neon-violet); --bubble-color-rgb: 148, 0, 211; }
+.language-bubble[data-lang="zh"] { --bubble-color: var(--neon-cyan); --bubble-color-rgb: 0, 255, 252; }
+.language-bubble[data-lang="ar"] { --bubble-color: var(--neon-magenta); --bubble-color-rgb: 255, 0, 255; }
+
+.language-bubble.active {
+    background: var(--bubble-color);
+}
+
+.translate-button {
+    background: transparent;
+    border: 2px solid var(--neon-purple);
+    color: var(--neon-purple);
+    padding: 0.8rem 1.5rem;
+    border-radius: 50px;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.translate-button:hover {
+    background: var(--neon-purple);
+    color: white;
+    box-shadow: 0 0 20px var(--neon-purple);
+}
+
+.translation-result {
+    margin-top: 1.5rem;
+    padding: 1.5rem;
+    background: rgba(106, 13, 173, 0.2);
+    border-radius: 10px;
+    border: 1px solid var(--neon-violet);
+    font-size: 1.2rem;
+    text-align: center;
+    min-height: 100px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.translation-text {
+    font-size: 1.3rem;
+    margin-bottom: 0.5rem;
+    color: var(--electric-blue);
+}
+
+.language-label {
+    font-size: 0.9rem;
+    color: var(--neon-purple);
+    font-style: italic;
+}
+
+.translating-text {
+    color: var(--electric-blue);
+    animation: pulse-opacity 1.5s infinite;
+}
+
+/* Buttons */
+.retry-button {
+    background: transparent;
+    border: 2px solid var(--electric-blue);
+    color: var(--electric-blue);
+    padding: 0.8rem 1.5rem;
+    border-radius: 50px;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 1.5rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.retry-button:hover {
+    background: var(--electric-blue);
+    color: var(--dark-bg);
+    box-shadow: 0 0 20px var(--electric-blue);
+}
+
+/* Footer */
+.app-footer {
+    text-align: center;
+    margin-top: 2rem;
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.9rem;
+}
+
+.highlight {
+    color: var(--neon-purple);
+    font-weight: 500;
+}
+
+/* Animations */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes electricPulse {
+    0% {
+        opacity: 0.3;
+    }
+    100% {
+        opacity: 0.7;
+    }
+}
+
+@keyframes glitch {
+    0% {
+        text-shadow: 0 0 10px var(--neon-purple);
+    }
+    25% {
+        text-shadow: 2px 0 10px var(--electric-blue);
+    }
+    50% {
+        text-shadow: -2px 0 10px var(--neon-violet);
+    }
+    100% {
+        text-shadow: 0 0 10px var(--neon-purple);
+    }
+}
+
+@keyframes flicker {
+    0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
+        opacity: 1;
+        text-shadow: 0 0 10px var(--electric-blue);
+    }
+    20%, 24%, 55% {
+        opacity: 0.7;
+        text-shadow: none;
+    }
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(0.8);
+        opacity: 0.7;
+    }
+    70% {
+        transform: scale(1.1);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(0.8);
+        opacity: 0.7;
+    }
+}
+
+@keyframes bubble-pulse {
+    0% { transform: scale(1); box-shadow: 0 0 10px var(--bubble-color); }
+    50% { transform: scale(1.1); box-shadow: 0 0 20px var(--bubble-color); }
+    100% { transform: scale(1); box-shadow: 0 0 10px var(--bubble-color); }
+}
+
+@keyframes pulse-opacity {
+    0% { opacity: 0.6; }
+    50% { opacity: 1; }
+    100% { opacity: 0.6; }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .container {
+        padding: 1.5rem;
+    }
+    
+    .title-glitch {
+        font-size: 2rem;
+    }
+    
+    #search-input {
+        padding: 1rem;
+    }
+    
+    .result-card, .error-card {
+        padding: 1.5rem;
+    }
+    
+    .word-text {
+        font-size: 1.8rem;
+    }
+    
+    .tabs {
+        overflow-x: auto;
+        padding-bottom: 0.5rem;
+    }
+    
+    .tab {
+        white-space: nowrap;
+        padding: 0.8rem 1rem;
+        font-size: 0.9rem;
+    }
+    
+    .language-bubbles {
+        gap: 0.6rem;
+    }
+    
+    .language-bubble {
+        width: 45px;
+        height: 45px;
+        font-size: 0.9rem;
+    }
+}
+    
+    /* Welcome Page Styles */
+.welcome-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    text-align: center;
+    position: relative;
+    z-index: 2;
+    padding: 2rem;
+}
+
+.welcome-content {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.copyright-text {
+    margin-top: 3rem;
+    font-size: 1.2rem;
+    color: var(--electric-blue);
+    text-shadow: 0 0 10px rgba(15, 240, 252, 0.5);
+    opacity: 0;
+    animation: fadeIn 1s forwards;
+    animation-delay: 3s;
+}
+
+.welcome-buttons {
+    display: flex;
+    gap: 1.5rem;
+    justify-content: center;
+    margin-top: 3rem;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.5s ease;
+}
+
+.welcome-buttons.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.welcome-button {
+    padding: 1rem 2rem;
+    border-radius: 50px;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.neon-button {
+    background: var(--neon-purple);
+    color: white;
+    border: 2px solid var(--neon-purple);
+    box-shadow: 0 0 15px var(--neon-purple);
+}
+
+.neon-button:hover {
+    background: var(--electric-blue);
+    border-color: var(--electric-blue);
+    box-shadow: 0 0 25px var(--electric-blue);
+    transform: translateY(-3px);
+}
+
+.ghost-button {
+    background: transparent;
+    color: var(--electric-blue);
+    border: 2px solid var(--electric-blue);
+}
+
+.ghost-button:hover {
+    background: rgba(15, 240, 252, 0.1);
+    box-shadow: 0 0 15px var(--electric-blue);
+    transform: translateY(-3px);
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* Typing cursor effect */
+#welcome-text::after {
+    content: '|';
+    animation: blink 1s infinite;
+    color: var(--electric-blue);
+}
+
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+}
